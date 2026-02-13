@@ -62,13 +62,15 @@ jobs:
           distribution: temurin
           java-version: ${{ needs.extract-versions.outputs.jdk_version }}
 
-      - name: Grant permissions
-        run: chmod -R 777 src-theme || true
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build
+        env:
+          CI: true
         run: ./gradlew build -x test -x detekt
 
       - name: Upload artifact
@@ -83,14 +85,19 @@ jobs:
     if: github.ref != 'refs/heads/nextgen'
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository and submodules
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - uses: actions/setup-java@v4
+      - name: Setup JDK
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: ${{ needs.extract-versions.outputs.jdk_version }}
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
 
       - name: Build
         run: ./gradlew build
