@@ -1,10 +1,13 @@
 package net.ccbluex.liquidbounce.utils.render
 
-import net.ccbluex.liquidbounce.utils.platform.PlatformUtils
+import net.minecraft.client.gui.DrawContext
 
-object Safeif (!net.ccbluex.liquidbounce.utils.platform.PlatformUtils.isAndroid) RenderUtils.{
+object SafeRenderUtils {
+    fun drawRect(context: DrawContext, x: Float, y: Float, width: Float, height: Float, color: Int) {
+        context.fill(x.toInt(), y.toInt(), (x + width).toInt(), (y + height).toInt(), color)
+    }
 
-    fun canRenderAdvanced(): Boolean {
-        return !PlatformUtils.isAndroid
+    fun drawString(context: DrawContext, text: String, x: Float, y: Float, color: Int) {
+        context.drawTextWithShadow(null, text, x.toInt(), y.toInt(), color)
     }
 }
